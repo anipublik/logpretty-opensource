@@ -95,4 +95,4 @@ This project is designed to be "plug and play".
 [MIT](LICENSE)
 
 ## ✍️ Author
-[Your Name]
+@anipublik
