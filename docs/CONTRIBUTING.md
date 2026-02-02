@@ -1,6 +1,6 @@
-# Contributing to LogForge
+# Contributing to LogPretty
 
-Thank you for considering contributing to LogForge!
+Thank you for considering contributing to LogPretty!
 
 ## How to Contribute
 

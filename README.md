@@ -1,119 +1,98 @@
-# 🔥 LogForge - Open Source
+# 🔥 LogPretty - Open Source
 
-Transform your messy logs to structured JSON instantly with AI. No signup required.
+Transform your messy logs to structured JSON instantly with AI. No signup required for Quick Mode.
 
 > **Open Source Version** - This version uses Anthropic's Claude API for AI-powered transformations.
 
-## Features
+## 🚀 Key Features
 
-### 🚀 Quick Mode (No Login Required)
-- Paste code or upload files
-- Transform to structured JSON logging
-- Download or copy results
-- Support for 8+ languages (Python, JavaScript, TypeScript, Java, Go, Ruby, PHP, C#)
-- Example code for each language
+### Quick Mode (No Login Required)
+- **Instant Transformation**: Paste code or upload files and get structured JSON logging instantly.
+- **Multi-Language Support**: Supports Python, JavaScript, TypeScript, Java, Go, Ruby, PHP, C#, and more.
+- **Privacy-First**: No data storage for ephemeral scans.
+- **Copy & Download**: Easy export of transformed code.
 
-### 💪 Power Mode (GitHub Login)
-- Browse your GitHub repositories
-- Scan entire repos for logging patterns
-- Auto-create PRs with transformations
-- Batch process multiple files
+### Power Mode (GitHub Integration)
+- **Repository Scanning**: Connect specific repositories to scan for logging patterns.
+- **Automated PRs**: (Beta) Automatically create Pull Requests with the transformed code.
+- **Batch Processing**: Transform multiple files at once.
 
-## Tech Stack
+## 📦 Project Structure
 
-- **Framework:** Next.js 14 (App Router)
-- **Styling:** TailwindCSS
-- **AI:** Anthropic Claude 3.5 Sonnet
-- **Auth:** GitHub OAuth
-- **Deployment:** Vercel
-
-## Getting Started
-
-### 1. Install Dependencies
-
-```bash
-npm install
+```
+logpretty/
+├── src/
+│   ├── app/           # Next.js App Router pages and API routes
+│   ├── components/    # React components (Quick, GitHub, Shared)
+│   ├── lib/           # Utilities, AI logic, Auth
+│   ├── config/        # Site configuration (site.ts)
+│   └── context/       # React Context providers
+├── docs/              # Detailed documentation
+│   ├── SETUP.md       # Installation and deployment guide
+│   ├── CONTRIBUTING.md# Contribution guidelines
+│   └── ARCHITECTURE_AND_DESIGN.md # Architecture/PRD
+├── public/            # Static assets
+└── ...config files
 ```
 
-### 2. Setup Environment Variables
+## 🛠 Tech Stack
 
-Copy `.env.example` to `.env.local`:
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: TailwindCSS
+- **AI Engine**: Anthropic Claude 3.5 Sonnet (Configurable)
+- **Auth**: GitHub OAuth
+- **Deployment**: Vercel / Docker
+
+## 🏁 Getting Started
+
+### 1. Prerequisites
+- Node.js 18+
+- An Anthropic API Key (or compatible AI provider)
+- (Optional) GitHub OAuth credentials for Power Mode
+
+### 2. Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/logpretty.git
+
+# Install dependencies
+npm install
+
+# Set up environment variables
 cp .env.example .env.local
 ```
 
-Required variables:
-- `ANTHROPIC_API_KEY` - Get from https://console.anthropic.com
+### 3. Configuration
+Edit `.env.local` to add your keys:
+```bash
+ANTHROPIC_API_KEY=sk-...
+```
 
-Optional (for GitHub integration):
-- `GITHUB_CLIENT_ID` - Create OAuth app at https://github.com/settings/developers
-- `GITHUB_CLIENT_SECRET`
-- `GITHUB_CALLBACK_URL` - e.g., http://localhost:3000/api/auth/callback
-- `JWT_SECRET` - Any random secure string
-- `NEXT_PUBLIC_APP_URL` - e.g., http://localhost:3000
+For detailed setup instructions, including GitHub OAuth configuration, see [docs/SETUP.md](docs/SETUP.md).
 
-### 3. Run Development Server
-
+### 4. Run Locally
 ```bash
 npm run dev
 ```
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-Open [http://localhost:3000](http://localhost:3000) to see the app.
+## 📚 Documentation
+- [Setup & Deployment](docs/SETUP.md): Detailed guide on environment variables, GitHub App creation, and Vercel deployment.
+- [Architecture](docs/ARCHITECTURE_AND_DESIGN.md): Deep dive into the design decisions, user flows, and product requirements.
+- [Contributing](docs/CONTRIBUTING.md): Guidelines for contributing to the project.
 
-## Project Structure
+## 🎨 Customization
+This project is designed to be "plug and play".
+- **Site Config**: Edit `src/config/site.ts` to update the site name, author links, and navigation.
+- **Branding**: Update `src/components/shared/Header.tsx` and `Hero.tsx` for visual changes.
 
-```
-logforge/
-├── src/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── auth/          # GitHub OAuth
-│   │   │   ├── transform/     # Quick Mode API
-│   │   │   └── github/        # Power Mode API
-│   │   ├── page.tsx           # Main page
-│   │   └── layout.tsx
-│   ├── components/
-│   │   ├── auth/              # Login components
-│   │   ├── quick/             # Quick Mode UI
-│   │   ├── github/            # Power Mode UI
-│   │   └── shared/            # Header, Footer, etc.
-│   ├── lib/
-│   │   └── ai/                # Anthropic Claude integration
-│   └── context/               # Theme context
-├── package.json
-└── README.md
-```
+## 💰 Cost Estimates
+- **AI API**: Pay-as-you-go (approx. $2-5/month for moderate usage).
+- **Hosting**: Free on Vercel Hobby tier.
 
-## Deployment
+## 📄 License
+[MIT](LICENSE)
 
-### Deploy to Vercel
-
-1. Push your code to GitHub
-2. Import project in Vercel
-3. Add environment variables
-4. Deploy
-
-```bash
-vercel
-```
-
-Make sure to set all environment variables in your Vercel project settings.
-
-## Cost
-
-- **Anthropic Claude API:** Pay-as-you-go (~$3/million input tokens)
-- **Vercel:** Free tier
-- **GitHub OAuth:** Free
-- **Estimated:** $5-15/month for moderate usage
-
-## License
-
-MIT
-
-## Author
-
-Anirudh (Ani) Sridharan
-- Website: https://techani.org
-- LinkedIn: https://linkedin.com/in/anirudhsridharan
-- GitHub: https://github.com/anirudhsridharan
+## ✍️ Author
+[Your Name]

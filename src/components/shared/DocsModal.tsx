@@ -2,6 +2,7 @@
 
 import { X } from 'lucide-react'
 import { useEffect } from 'react'
+import { siteConfig } from '@/config/site'
 
 interface DocsModalProps {
   isOpen: boolean
@@ -37,11 +38,11 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
-      
+
       {/* Modal */}
       <div className="relative w-full max-w-4xl max-h-[90vh] mx-4 bg-background rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
@@ -102,8 +103,8 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
             <h3 className="text-xl font-bold mb-4 mt-8">Need Help?</h3>
             <p className="text-muted-foreground">
               If you encounter any issues or have questions, please email{' '}
-              <a href="mailto:ani@anisri.dev" className="text-orange-500 hover:text-orange-600 underline">
-                ani@anisri.dev
+              <a href={`mailto:${siteConfig.author.email}`} className="text-orange-500 hover:text-orange-600 underline">
+                {siteConfig.author.email}
               </a>
             </p>
           </div>

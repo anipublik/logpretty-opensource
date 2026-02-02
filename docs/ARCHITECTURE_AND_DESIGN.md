@@ -1,10 +1,10 @@
-# LogForge - HYBRID BUILD (Quick + Power Mode) 🎯🔥
+# LogPretty - HYBRID BUILD (Quick + Power Mode) 🎯🔥
 ## No Login Required, But GitHub Available for Power Users
 
 **Quick Mode:** Paste/Upload → Transform → Download (NO LOGIN)
 **Power Mode:** Sign in → Scan Repos → Create PRs (GITHUB LOGIN)
 **Timeline:** 6 hours to ship
-**Cost:** $2-5/month (DeepSeek API)
+**Cost:** $5-15/month (Anthropic API)
 
 ---
 
@@ -63,7 +63,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  🔥 LogForge    [Examples] [Docs]     [Sign in with GitHub] │
+│  🔥 LogPretty    [Examples] [Docs]     [Sign in with GitHub] │
 ├─────────────────────────────────────────────────────────────┤
 │                                                               │
 │  Transform Your Logs to Structured JSON                      │
@@ -93,25 +93,24 @@
 
 ## 🛠️ EXTERNAL TOOLS (Only 3)
 
-### 1. **DeepSeek API** (Required)
-**Cost:** ~$2-5/month
+### 1. **Anthropic Claude API** (Required)
+**Cost:** ~$5/million tokens
 **Setup:** 2 minutes
 ```
-1. Go to https://platform.deepseek.com
+1. Go to https://console.anthropic.com
 2. Sign up / Log in
 3. Go to "API Keys"
-4. Click "Create API Key"
+4. Click "Create Key"
 
 SAVE THIS:
-DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxx
+ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxx
 
-Model to use: deepseek-chat
+Model to use: claude-3-5-sonnet-20241022
 ```
 
 **Pricing:**
-- Input: $0.14 per 1M tokens
-- Output: $0.28 per 1M tokens
-- **~10x cheaper than Claude!**
+- Input: $3.00 per 1M tokens
+- Output: $15.00 per 1M tokens
 
 ### 2. **GitHub OAuth App** (Optional - only for Power Mode)
 **Cost:** FREE
@@ -119,7 +118,7 @@ Model to use: deepseek-chat
 ```
 GITHUB_CLIENT_ID=Iv1.xxxxxxxxxxxxx
 GITHUB_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxx
-GITHUB_CALLBACK_URL=https://logforge.anisri.dev/api/auth/callback
+GITHUB_CALLBACK_URL=https://logpretty.example.com/api/auth/callback
 ```
 
 ### 3. **Vercel** (Hosting)
@@ -132,9 +131,9 @@ GITHUB_CALLBACK_URL=https://logforge.anisri.dev/api/auth/callback
 
 ```bash
 # Create project
-npx create-next-app@latest logforge --typescript --tailwind --app
+npx create-next-app@latest logpretty --typescript --tailwind --app
 
-cd logforge
+cd logpretty
 
 # Install dependencies
 npm install \
@@ -159,7 +158,7 @@ npx shadcn-ui@latest add button card select textarea tabs badge toast
 ## 📁 PROJECT STRUCTURE
 
 ```
-logforge/
+logpretty/
 ├── app/
 │   ├── api/
 │   │   ├── auth/                      # GitHub OAuth (optional)
@@ -197,7 +196,7 @@ logforge/
 │   └── ui/                            # shadcn
 ├── lib/
 │   ├── ai/
-│   │   └── deepseek.ts                # DeepSeek API (no auth)
+│   │   └── anthropic.ts               # Anthropic Claude API (no auth)
 │   ├── auth/
 │   │   ├── github.ts                  # GitHub OAuth (optional)
 │   │   └── session.ts                 # JWT sessions
@@ -217,7 +216,7 @@ logforge/
 ```
 □ Create Next.js project
 □ Install dependencies
-□ Get DeepSeek API key (https://platform.deepseek.com)
+□ Get Anthropic API key (https://console.anthropic.com)
 □ Setup .env.local
 □ Build basic layout (Header, Hero)
 □ Create tabs: "Quick Transform" | "GitHub Repos"
@@ -225,7 +224,7 @@ logforge/
 
 ### HOUR 2: Quick Mode - Transform (10:00 - 11:00 AM)
 ```
-□ Build DeepSeek API client
+□ Build Anthropic API client
 □ Create /api/transform route (NO AUTH CHECK)
 □ Build CodeEditor component
 □ Build TransformPanel component
@@ -277,15 +276,13 @@ logforge/
 
 ## 🔑 KEY CODE PATTERNS
 
-### DeepSeek API Integration
-**File: `lib/ai/deepseek.ts`**
+### Anthropic API Integration
+**File: `lib/ai/anthropic.ts`**
 ```typescript
-import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
 
-// DeepSeek is OpenAI-compatible!
-const deepseek = new OpenAI({
-  apiKey: process.env.DEEPSEEK_API_KEY,
-  baseURL: 'https://api.deepseek.com',
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
 export interface TransformResult {
@@ -302,81 +299,29 @@ export async function transformLog(
 ): Promise<TransformResult> {
   const prompt = getTransformPrompt(input, language);
   
-  const response = await deepseek.chat.completions.create({
-    model: 'deepseek-chat',
+  const msg = await anthropic.messages.create({
+    model: 'claude-3-5-sonnet-20241022',
+    max_tokens: 3000,
+    temperature: 0,
     messages: [
       {
         role: 'user',
         content: prompt,
       },
     ],
-    max_tokens: 3000,
-    temperature: 0.3,
   });
 
-  const text = response.choices[0].message.content || '';
+  const text = msg.content[0].text;
   return parseResponse(text, language);
 }
-
-function getTransformPrompt(input: string, language: string): string {
-  return `Transform this ${language} logging code to structured JSON logging.
-
-Input:
-${input}
-
-Return ONLY a JSON object (no markdown):
-{
-  "code": "transformed code here",
-  "library": "recommended library",
-  "install": "installation command",
-  "imports": ["import lines"],
-  "tips": ["improvement 1", "improvement 2"]
-}
-
-Requirements:
-- Use structured key-value logging
-- Proper log levels (debug/info/warn/error)
-- Add correlation/trace IDs where relevant
-- Follow ${language} naming conventions`;
-}
-
-function parseResponse(response: string, language: string): TransformResult {
-  try {
-    let json = response.trim();
-    
-    // Remove markdown code blocks if present
-    if (json.includes('```json')) {
-      json = json.split('```json')[1].split('```')[0].trim();
-    } else if (json.includes('```')) {
-      json = json.split('```')[1].split('```')[0].trim();
-    }
-    
-    const parsed = JSON.parse(json);
-    
-    return {
-      code: parsed.code || response,
-      library: parsed.library || 'unknown',
-      install: parsed.install || '',
-      imports: parsed.imports || [],
-      tips: parsed.tips || [],
-    };
-  } catch (error) {
-    return {
-      code: response,
-      library: 'unknown',
-      install: '',
-      imports: [],
-      tips: [],
-    };
-  }
-}
+// ... rest of the helper functions
 ```
 
 ### Quick Mode (No Auth)
 **File: `app/api/transform/route.ts`**
 ```typescript
 import { NextRequest, NextResponse } from 'next/server';
-import { transformLog } from '@/lib/ai/deepseek';
+import { transformLog } from '@/lib/ai/anthropic';
 
 export async function POST(req: NextRequest) {
   // NO AUTH CHECK - Anyone can use this!
@@ -519,10 +464,10 @@ Value: HIGH (transforms whole repo)
 ## 💰 COST
 
 **Monthly:**
-- DeepSeek API: $2-5 (usage-based, ~10x cheaper than Claude!)
+- Anthropic API: $5-15 (pay-as-you-go)
 - Vercel: $0 (free tier)
 - GitHub OAuth: $0 (free)
-- **Total: $2-5/month**
+- **Total: $5-15/month**
 
 **No Database Costs!**
 **No Redis Costs!**
@@ -535,14 +480,14 @@ Value: HIGH (transforms whole repo)
 **1. Environment Variables (Vercel):**
 ```bash
 # Required (for both modes)
-DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxx
+ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxx
 
 # Optional (only if enabling GitHub mode)
 GITHUB_CLIENT_ID=Iv1.xxxxxxxxxxxxx
 GITHUB_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxx
-GITHUB_CALLBACK_URL=https://logforge.anisri.dev/api/auth/callback
+GITHUB_CALLBACK_URL=https://logpretty.example.com/api/auth/callback
 JWT_SECRET=your-super-secret-random-string
-NEXT_PUBLIC_APP_URL=https://logforge.anisri.dev
+NEXT_PUBLIC_APP_URL=https://logpretty.example.com
 ```
 
 **2. Deploy:**
@@ -597,22 +542,22 @@ git push origin main
 
 **Day 1 - Launch Quick Mode:**
 ```
-"LogForge - Transform messy logs to JSON instantly
+"LogPretty - Transform messy logs to JSON instantly
 ✨ No signup required
 ⚡ Just paste and transform
 🆓 100% free
 
-Try it: logforge.anisri.dev"
+Try it: logpretty.example.com"
 ```
 
 **Week 2 - Promote Power Mode:**
 ```
-"New: LogForge now scans GitHub repos!
+"New: LogPretty now scans GitHub repos!
 🔍 Find all your legacy logs
 🤖 Transform with AI
 🚀 Auto-create PRs
 
-Sign in: logforge.anisri.dev"
+Sign in: logpretty.example.com"
 ```
 
 ---
@@ -646,7 +591,7 @@ By building this, you learn:
 - ✅ OAuth implementation (optional feature)
 - ✅ File uploads & processing
 - ✅ GitHub API integration
-- ✅ AI API integration
+- ✅ Anthropic API integration
 - ✅ JWT sessions
 - ✅ Tab-based UI patterns
 - ✅ Progressive enhancement (works without login)

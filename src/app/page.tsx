@@ -7,11 +7,13 @@ import Hero from '@/components/shared/Hero'
 import TransformPanel from '@/components/quick/TransformPanel'
 import RepoList from '@/components/github/RepoList'
 import LoginButton from '@/components/auth/LoginButton'
+import DocsModal from '@/components/shared/DocsModal'
 import { useSession } from '@/hooks/useSession'
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'quick' | 'github'>('quick')
+  const [activeTab, setActiveTab] = useState<'quick' | 'github' | 'docs'>('quick')
   const { session } = useSession()
+  const [docsOpen, setDocsOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-background">
@@ -42,6 +44,19 @@ export default function Home() {
                   }`}
                 >
                   GitHub Repos
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('docs')
+                    setDocsOpen(true)
+                  }}
+                  className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                    activeTab === 'docs'
+                      ? 'bg-background shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  📖 Docs
                 </button>
               </div>
             </div>
@@ -126,6 +141,10 @@ export default function Home() {
         </section>
       </main>
       <Footer />
+      <DocsModal isOpen={docsOpen} onClose={() => {
+        setDocsOpen(false)
+        setActiveTab('quick')
+      }} />
     </div>
   )
 }

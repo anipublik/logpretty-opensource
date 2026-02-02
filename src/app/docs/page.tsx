@@ -10,12 +10,12 @@ export default function DocsPage() {
       <main className="flex-1 pt-32 pb-16 px-4">
         <div className="container mx-auto max-w-4xl">
           <h1 className="text-4xl font-bold mb-8">Documentation</h1>
-          
+
           <div className="space-y-8">
             <section>
               <h2 className="text-2xl font-bold mb-4">Getting Started</h2>
               <p className="text-muted-foreground mb-4">
-                LogForge helps you transform legacy logging code into modern, structured JSON logging with AI assistance.
+                LogPretty helps you transform legacy logging code into modern, structured JSON logging with AI assistance.
               </p>
             </section>
 
@@ -70,11 +70,11 @@ export default function DocsPage() {
             <section>
               <h2 className="text-2xl font-bold mb-4">API</h2>
               <p className="text-muted-foreground mb-4">
-                LogForge provides a simple REST API for transforming code programmatically.
+                LogPretty provides a simple REST API for transforming code programmatically.
               </p>
               <div className="p-4 rounded-lg bg-muted">
                 <pre className="text-sm overflow-x-auto">
-{`POST /api/transform
+                  {`POST /api/transform
 Content-Type: application/json
 
 {

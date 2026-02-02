@@ -2,7 +2,7 @@ import { ThemeProvider } from '@/context/ThemeContext'
 import './globals.css'
 
 export const metadata = {
-  title: 'LogForge - Transform Your Logs to Structured JSON',
+  title: 'LogPretty - Transform Your Logs to Structured JSON',
   description: 'Free, instant log transformation. No signup required. Transform messy logs to structured JSON with AI.',
   icons: {
     icon: [

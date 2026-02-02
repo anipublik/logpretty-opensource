@@ -1,14 +1,14 @@
-# LogForge Setup Guide
+# LogPretty Setup Guide
 
 ## Quick Start (5 minutes)
 
-### Step 1: Get DeepSeek API Key
+### Step 1: Get Anthropic API Key
 
-1. Go to https://platform.deepseek.com
+1. Go to https://console.anthropic.com
 2. Sign up or log in
-3. Navigate to "API Keys"
-4. Click "Create API Key"
-5. Copy the key (starts with `sk-`)
+3. Click "Get API Keys"
+4. Click "Create Key"
+5. Copy the key (starts with `sk-ant-`)
 
 ### Step 2: Configure Environment
 
@@ -18,10 +18,10 @@ Create a `.env.local` file in the project root:
 cp .env.example .env.local
 ```
 
-Edit `.env.local` and add your DeepSeek API key:
+Edit `.env.local` and add your Anthropic API key:
 
 ```bash
-DEEPSEEK_API_KEY=sk-your-actual-key-here
+ANTHROPIC_API_KEY=sk-ant-your-actual-key-here
 ```
 
 ### Step 3: Run the Development Server
@@ -49,7 +49,7 @@ If you want to enable the GitHub repository scanning feature:
 1. Go to https://github.com/settings/developers
 2. Click "New OAuth App"
 3. Fill in the details:
-   - **Application name:** LogForge (or your preferred name)
+   - **Application name:** LogPretty (or your preferred name)
    - **Homepage URL:** `http://localhost:3000` (for development)
    - **Authorization callback URL:** `http://localhost:3000/api/auth/callback`
 4. Click "Register application"
@@ -62,10 +62,10 @@ Add these to your `.env.local` file:
 
 ```bash
 # GitHub OAuth (Optional - for Power Mode)
-GITHUB_CLIENT_ID=Iv1.your-client-id-here
-GITHUB_CLIENT_SECRET=your-client-secret-here
+GITHUB_CLIENT_ID=your-client-id
+GITHUB_CLIENT_SECRET=your-client-secret
 GITHUB_CALLBACK_URL=http://localhost:3000/api/auth/callback
-JWT_SECRET=generate-a-random-string-here
+JWT_SECRET=your-random-secret
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
@@ -110,7 +110,7 @@ git push -u origin main
 2. Click "Import Project"
 3. Select your GitHub repository
 4. Add environment variables:
-   - `DEEPSEEK_API_KEY` (required)
+   - `ANTHROPIC_API_KEY` (required)
    - `GITHUB_CLIENT_ID` (optional)
    - `GITHUB_CLIENT_SECRET` (optional)
    - `GITHUB_CALLBACK_URL` (use your production URL)
@@ -133,9 +133,9 @@ If you enabled GitHub integration:
 ### "Cannot find module" errors
 Run: `npm install`
 
-### DeepSeek API not working
+### Anthropic API not working
 - Check your API key is correct
-- Verify you have credits at https://platform.deepseek.com
+- Verify you have credits at https://console.anthropic.com
 - Check the console for error messages
 
 ### GitHub OAuth not working
@@ -156,7 +156,7 @@ npm run dev -- -p 3001
 
 ## Cost Breakdown
 
-- **DeepSeek API:** ~$2-5/month (pay-as-you-go)
+- **Anthropic Claude API:** ~$3/million tokens (pay-as-you-go)
 - **Vercel Hosting:** Free (hobby tier)
 - **GitHub OAuth:** Free
 - **Total:** $2-5/month
